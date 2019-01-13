@@ -1,0 +1,50 @@
+.AlertBox {
+	position: absolute; 
+	bottom: 5px
+}
+
+.AlertMsg {
+	display: none;
+}
+
+/*
+#jsTree 
+{ 
+	
+	min-width:319px; 
+	border-right:1px solid silver; 
+	overflow:auto; 
+	padding:0px 0; 
+}
+
+* ContextMenu jsTree *
+.vakata-context li > a 
+{
+    display: block;
+    padding: 0 2em;
+    text-decoration: none;
+    width: auto;
+    color: #000;
+    white-space: nowrap;
+    line-height: 1.4em;
+    height: 1.4em;
+}
+
+.vakata-context li > a > i:empty {
+    width: 1.4em;
+}
+
+.vakata-context li > a .vakata-contextmenu-sep {
+    display: inline-block;
+    width: 1px;
+    height: 1.4em;
+    background: #fff;
+    margin: 0 .5em 0 0;
+    border-left: 1px solid #e2e3e3;
+}
+
+.vakata-context li > a > i:empty {
+    width: 1.4em;
+
+}*/
+
