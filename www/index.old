@@ -1,0 +1,198 @@
+<?php
+ini_set('display_errors', '1');
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+include_once 'vendor/autoload.php';
+
+function myErrorHandler($errno, $errstr, $errfile, $errline)
+{
+    if (!(error_reporting() & $errno)) {
+        // This error code is not included in error_reporting, so let it fall
+        // through to the standard PHP error handler
+        return false;
+    }
+
+    switch ($errno) {
+    case E_USER_ERROR:
+        echo "<b>My ERROR</b> [$errno] $errstr<br />\n";
+        echo "  Fatal error on line $errline in file $errfile";
+        echo ", PHP " . PHP_VERSION . " (" . PHP_OS . ")<br />\n";
+        echo "Aborting...<br />\n";
+        exit(1);
+        break;
+
+    case E_USER_WARNING:
+        echo "<b>My WARNING</b> [$errno] $errstr<br />\n";
+        break;
+
+    case E_USER_NOTICE:
+        echo "<b>My NOTICE</b> [$errno] $errstr<br />\n";
+        break;
+
+    default:
+        echo "Unknown error type: [$errno] $errstr<br />\n";
+        break;
+    }
+
+    /* Don't execute PHP internal error handler */
+    return true;
+}
+
+function SendMail($mail,$NomPrenom,$eMail)
+{
+  $mail->setFrom('serge.noel@net6a.com', 'Club Macla'); // Personnaliser l'envoyeur
+  $mail->addAddress($eMail, $NomPrenom); // Ajouter le destinataire
+  //$mail->addAddress('To2@example.com');
+  $mail->addReplyTo('serge.noel@net6a.com', 'Club Macla'); // L'adresse de r&eacute;ponse
+  //$mail->addCC('cc@example.com');
+  //$mail->addBCC('bcc@example.com');
+
+  $mail->addAttachment('Files/Convocation_AG_2019.pdf'); // Ajouter un attachement
+  //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');
+  $mail->isHTML(true); // Param&eacute;trer le format des emails en HTML ou non
+
+  $mail->Subject = 'Disponibilite salle et convocation pdf';
+  $mail->Body = getBodyHTML();
+  $mail->AltBody = 'Message en mode texte';
+
+if(!$mail->send()) {
+   echo 'Erreur, message non envoy&eacute;.';
+   echo 'Mailer Error: ' . $mail->ErrorInfo;
+} 
+
+}
+
+
+
+function getBodyHTML2()
+{
+  $Body = "<html>
+  <head>
+    <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">
+  </head>
+  <body text=\"#000000\" bgcolor=\"#FFFFFF\">
+    <p>Bonjour &agrave; tous,</p>
+    <p><u><b>N'oubliez pas de r&eacute;server vos repas</b></u><b><u> en pr&eacute;cisant le nombre
+          de personnes !</u></b> ( avant le 15 janvier aupr&egrave;s de : <u><span
+          style=\"color:blue\"><a href=\"mailto:club@macla.fr\">club@macla.fr</a></span></u>
+      et au 06 24 60 79 11).</p>
+    <p>seules quelques personnes sont inscrites &agrave; ce jour.</p>
+    <p>Certains n'ont pas encore r&eacute;gularis&eacute; leur cotisation, c'est indispensable que ce
+      soit fait <b>AVANT</b> l'AG</p>
+    <p>Ci-joint le message initial pour l'assembl&eacute;e, avec la convocation en pi&egrave;ce
+      jointe et le pouvoir pour ceux qui ne pourront &ecirc;tre pr&eacute;sent.</p>
+    <p>Cordialement</p>
+    <p>Serge pour le MACLA</p>
+    <p>&nbsp;</p>
+    <p>Cher adh&eacute;rent, ch&egrave;re adh&eacute;rente</p>
+    <p><b>Vous &ecirc;tes convi&eacute;(e) &agrave; l'assembl&eacute;e g&eacute;n&eacute;rale du MACLA</b> qui se tiendra le
+      samedi 26 janvier 2019 &agrave; partir de 10 heures comme l'an pass&eacute; &agrave; la
+      salle de r&eacute;union du complexe Ren&eacute; Cassin du Pellerin.</p>
+    <p>Ordre du jour : </p>
+    <ul type=\"disc\">
+      <li>Rapport moral</li>
+      <li>Rapport sportif</li>
+      <li>Rapport financier</li>
+      <li>Questions diverses</li>
+    </ul>
+    <p> </p>
+    <p>Le d&eacute;jeuner
+        sera pris sur place &agrave; la fin de la r&eacute;union avec participation de
+        15 Euros </b></p>
+    <p>( uniquement sur
+      r&eacute;servation avant le 15 janvier aupr&egrave,s de : <u><span
+          style=\"color:blue\"><a href=\"mailto:club@macla.fr\">club@macla.fr</a></span></u>
+      et au 06 24 60 79 11). </p>
+    <p>L'ap&eacute;ritif, les
+      boissons, le caf&eacute; seront offerts par le club.</p>
+    <p> </p>
+    <p>Je vous souhaite
+      de bonnes f&ecirc;tes de fin d'ann&eacute;e en attendant le plaisir de vous
+      retrouver .</p>
+    <p> </p>
+    <p>Le Pr&eacute;sident
+      Alain Brachet</p>
+    <p> </p>
+    <p><b><span><u>PS :</span></u></b>
+      il est indispensable que vous soyez &agrave; jour de votre cotisation &agrave; 
+      la date de l'assembl&eacute;e g&eacute;n&eacute;rale.  </p>
+    <p> </p>
+    <p><b>Si vous ne pouvez y &ecirc;tre pr&eacute;sent, le fichier joint vous permet
+        de faire un pouvoir.</b></p>
+  </body>
+</html>";
+  return $Body;
+}
+
+function getBodyHTML()
+{
+  $Body = "<p>Ci-joint le planning de disponibilit&eacute; de la salle du Pellerin jusqu'&agrave; fin Mars.
+             <ul>
+               <li>Janvier
+                 <ul>
+                   <li>Disponible Janvier 13 /27</li>
+                   <li><b>NON</b> disponible dimanche 20.</li>
+                 </ul></li>
+               <li>F&eacute;vrier
+                 <ul>
+                   <li>disponible 3/10/17/24</li>
+                 </ul></li>
+               <li>Mars
+                 <ul>
+                   <li>disponible  3/17/31</li>
+                   <li><b>NON</b> disponible 10 et 24</li>
+                 </ul></li>
+             </ul>
+             <b>Petit rappel</b> ne pas oublier de r&eacute;server votre repas si vous souhaitez d&eacute;jeuner le samedi  26 Janvier lors de 
+              l'assembl&eacute;e g&eacute;n&eacute;rale. ( club@macla.fr ou sms au 06.24.69.79.11 )
+              Cette ann&eacute;e nous aurons sur place un Food Truck \"Frany's\" (parents d'un jeune du club ) qui fabrique des burger's tout fait maison.</p>
+              <p>Bons vols &agrave; tous.</p>
+              <p>Alain</p>";
+  return($Body);
+}
+
+// Report all PHP errors (see changelog)
+error_reporting(E_ALL);
+set_error_handler("myErrorHandler");
+ini_set('display_errors', '1');
+
+$mail = new PHPmailer();
+
+
+
+$mail->isSMTP();
+$mail->Host='smtp.net6a.com';
+$mail->SMTPAuth = true;
+$mail->Username = 'serge.noel@net6a.com';
+$mail->Password = 'qhe3ZCTz';
+$mail->SMTPSecure = 'none';
+$mail->Port = 587;
+
+$Debug = true;
+
+echo file_get_content("form.html");
+die();
+if( $Debug )
+  {
+  $mail->SMTPDebug = 0;
+  SendMail($mail,"Serge NOEL","serge.noel2008@gmail.com");
+  $mail->ClearAddresses();
+  SendMail($mail,"Serge NOEL","serge.noel@easylinux.fr");
+  }
+else
+  {
+  $mail->SMTPDebug = 0;
+  $dbh = new PDO('mysql:host=gestiondb;dbname=MaclaGestion', 'root', 'Secr3t');
+  foreach($dbh->query('SELECT * from Adherents') as $row) 
+    {
+    $mail->ClearAddresses();
+    //echo nl2br(print_r($row,true));
+    echo "Envoi : ".$row["Nom"]." ".$row["Prenom"]." - ".$row["Adresse email"] . "<br/>";
+    SendMail($mail,$row["Nom"]." ".$row["Prenom"],$row["Adresse email"]);
+    }
+  $dbh = null;
+  }
+echo "Message(s) envoyé(s)";
+
+// INSERT INTO `MailEnvoye` SELECT `Identifiant`, 1, '2019-01-12', FALSE, `Nom`, `Prenom`, `Adresse Email` FROM Adherents

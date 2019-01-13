@@ -1,0 +1,1 @@
+[{"Type":"Item","Label":"D\u00e9connection","Id":"Logout","Action":"Quit()","Ref":"#"},{"Type":"Menu","Title":"Edition","Items":[{"Label":"Copier","Action":"Copy()","Ref":"#"},{"Label":"Couper","Action":"Cut()","Ref":"#"},{"Label":"Coller","Action":"Paste()","Ref":"#"}]},{"Type":"Item","Label":"Envoi mail","Action":"SendMail()","Ref":"#"}]
